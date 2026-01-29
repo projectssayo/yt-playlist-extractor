@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extract Video Metadata</title>
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header-section">
+            <h1>Extract YouTube Playlist Metadata</h1>
+            <div class="subtitle">For Devs By Devs</div>
+            <p class="description">
+                Turn any YouTube playlist into structured JSON data. Analyze, export, and integrate with ease.
+            </p>
+        </header>
+
+        <!-- Input Section -->
+        <section class="input-section widget-container">
+            <div class="input-group">
+                <input
+                    type="url"
+                    id="playlist_url"
+                    class="url-input"
+                    placeholder="Paste YouTube playlist URL..."
+
+                >
+                <button id="scrape_btn" class="scrape-btn">
+                    <i class="fas fa-bolt"></i> Scrape
+                </button>
+            </div>
+            <p class="note" id="info_text">
+                <i class="fas fa-info-circle"></i> Public playlists only • Max 50 videos (upgrade for more)
+            </p>
+        </section>
+
+        <!-- Main Results Section -->
+        <section class="widget-container">
+            <!-- View Tabs -->
+            <div class="view-tabs">
+                <button class="view-tab active" data-tab="visual">
+                    <i class="fas fa-photo-video"></i> Visual Display
+                </button>
+                <button class="view-tab" data-tab="json">
+                    <i class="fas fa-code"></i> JSON Data
+                </button>
+                <button class="view-tab" data-tab="advanced">
+                    <i class="fas fa-laptop-code"></i> Advanced JSON
+                </button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="tab-content active" id="visual-tab">
+                <!-- Empty State Widget - Initially visible -->
+                <div class="empty-state" id="visual_empty">
+                    <i class="fas fa-film"></i>
+                    <h3>No Video Data Available</h3>
+                    <p>Enter a YouTube playlist URL above and click "Scrape" to extract video metadata.</p>
+                </div>
+
+                <!-- Playlist Info - Initially hidden -->
+                <div class="playlist-info" id="playlist_info" style="display: none;">
+                    <div class="playlist-header">
+                        <img class="playlist-thumb" id="playlist_thumb" src="" alt="Playlist thumbnail" width="200" height="110">
+                        <div class="playlist-content">
+                            <h2 class="playlist-title" id="playlist_title">JavaScript Full Course by Shradha Khapra</h2>
+                            <p class="playlist-description" id="playlist_desc">
+                                Complete JavaScript Full Course covering Variables & Data Types, Operators, Conditional Statements, Loops, Strings, Arrays, Functions, DOM, Events, Projects, Classes & Objects, Callbacks, Promises, Async Await, Fetch API and more.
+                            </p>
+                            <div class="playlist-stats">
+                                <div class="stat">
+                                    <div class="stat-label">Total Videos</div>
+                                    <div class="stat-value" id="video_count">14</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-label">Channel</div>
+                                    <div class="stat-value" id="channel_name">Shradha Khapra</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-label">Total Duration</div>
+                                    <div class="stat-value" id="total_duration">15.5 hours</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-label">Last Updated</div>
+                                    <div class="stat-value" id="last_updated">Today</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Videos Grid - Initially hidden -->
+                <div class="videos-grid" id="videos_grid" style="display: none;">
+                    <!-- Videos will be loaded here -->
+                </div>
+            </div>
+
+            <!-- JSON Data Tab -->
+            <div class="tab-content" id="json-tab">
+                <div class="json-container">
+                    <div class="json-header">
+                        <div class="json-title">
+                            <i class="fas fa-database"></i> Standard JSON Output
+                        </div>
+                        <button class="copy-btn" id="copy_json_btn">
+                            <i class="far fa-copy"></i> Copy Stnd JSON
+                        </button>
+                    </div>
+                    <div class="json-display">
+                        <pre id="json_output"><code>// No data available. Scrape a playlist first.</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced JSON Tab -->
+            <div class="tab-content" id="advanced-tab">
+                <div class="json-container">
+                    <div class="json-header">
+                        <div class="json-title">
+                            <i class="fas fa-microchip"></i> Advanced JSON with Analytics
+                        </div>
+                        <button class="copy-btn" id="copy_advanced_btn">
+                            <i class="far fa-copy"></i> Copy Adv JSON
+                        </button>
+                    </div>
+                    <div class="json-display">
+                        <pre id="advanced_json_output"><code>// No data available. Scrape a playlist first.</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Playlists Section -->
+        <section class="quick-playlists-section widget-container">
+    <h3 class="quick-playlists-title">
+        <i class="fas fa-list"></i> Quick Playlist URLs To Test
+    </h3>
+    <div class="playlists-grid" id="quick_playlists">
+
+        <div class="playlist-item" data-url="https://www.youtube.com/playlist?list=PLGjplNEQ1it_oTvuLRNqXfz_v_0pq6unW">
+            <div class="playlist-icon">
+                <i class="fas fa-code"></i>
+            </div>
+            <div class="playlist-text">
+                <div class="playlist-name">Python Language Full Course</div>
+                <div class="playlist-url">https://www.youtube.com/playlist?list=PLGjplNEQ1it8-0CmoljS5yeV-GlKSUEt0</div>
+            </div>
+        </div>
+
+        <div class="playlist-item" data-url="https://www.youtube.com/playlist?list=PLUDwpEzHYYLtvMVjc-Va3RXLKtdB-ofc2">
+            <div class="playlist-icon">
+                <i class="fas fa-vial"></i>
+            </div>
+            <div class="playlist-text">
+                <div class="playlist-name">Playwright Tutorial</div>
+                <div class="playlist-url">https://www.youtube.com/playlist?list=PLUDwpEzHYYLtvMVjc-Va3RXLKtdB-ofc2</div>
+            </div>
+        </div>
+
+        <div class="playlist-item" data-url="https://www.youtube.com/playlist?list=PL4cUxeGkcC9gZD-Tvwfod2gaISzfRiP9d">
+            <div class="playlist-icon">
+                <i class="fas fa-react"></i>
+            </div>
+            <div class="playlist-text">
+                <div class="playlist-name">React Firebase Tutorial</div>
+                <div class="playlist-url">https://www.youtube.com/playlist?list=PL4cUxeGkcC9gZD-Tvwfod2gaISzfRiP9d</div>
+            </div>
+        </div>
+
+        <div class="playlist-item" data-url="https://www.youtube.com/playlist?list=PLxgZQoSe9cg00xyG5gzb5BMkOClkch7Gr">
+            <div class="playlist-icon">
+                <i class="fas fa-laptop-code"></i>
+            </div>
+            <div class="playlist-text">
+                <div class="playlist-name">Java and DSA Foundation Course</div>
+                <div class="playlist-url">https://www.youtube.com/playlist?list=PLxgZQoSe9cg00xyG5gzb5BMkOClkch7Gr</div>
+            </div>
+        </div>
+
+        <div class="playlist-item" data-url="https://www.youtube.com/playlist?list=PLUDwpEzHYYLs3DYFqm79fIj2QOzPke_fW">
+            <div class="playlist-icon">
+                <i class="fas fa-network-wired"></i>
+            </div>
+            <div class="playlist-text">
+                <div class="playlist-name">API Testing with Postman</div>
+                <div class="playlist-url">https://www.youtube.com/playlist?list=PLUDwpEzHYYLs3DYFqm79fIj2QOzPke_fW</div>
+            </div>
+        </div>
+
+        <div class="playlist-item" data-url="https://www.youtube.com/playlist?list=PLnS-KSZtIXlHBQFRXTPP1rAJ2utPwW5EB">
+            <div class="playlist-icon">
+                <i class="fas fa-tv"></i>
+            </div>
+            <div class="playlist-text">
+                <div class="playlist-name">Friends Season 3</div>
+                <div class="playlist-url">https://www.youtube.com/playlist?list=PLnS-KSZtIXlHBQFRXTPP1rAJ2utPwW5EB</div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+        <!-- API Request Section -->
+        <section class="api-section widget-container">
+            <h2 class="section-title">API Request</h2>
+            <div class="endpoint-box">
+                <span>GET</span> https://api.example.com/v1/playlist?url=<span class="param">{playlist_url}</span>&format=<span class="param">{json|advanced}</span>
+            </div>
+
+            <div class="api-form">
+                <input
+                    type="email"
+                    id="user_email"
+                    class="email-input"
+                    placeholder="Enter your email for API access..."
+                >
+                <button id="api_request_btn" class="api-request-btn">
+                    <i class="fas fa-key"></i> Ask for API Access
+                </button>
+            </div>
+
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2024 Extract Video Metadata. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="/about-us">About Us</a>
+                <a href="#terms">Terms of Service</a>
+                <a href="/404-page" target="_blank">
+                    Powered by 5/10 CGP wala
+                </a>
+                <a href="/">API Documentation</a>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>
