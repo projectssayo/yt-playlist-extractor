@@ -47,6 +47,11 @@ app.get("/404-page", (req, res) => {
 })
 
 
+app.use((req, res) => {
+    res.status(404).sendFile(path.join(__dirname, "404.html"));
+});
+
+
 app.listen(PORT, () => {
     console.log(`hi server on http://localhost:${PORT}`);
 });
